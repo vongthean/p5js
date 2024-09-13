@@ -10,14 +10,25 @@ let tick = 0,
   window_line,
   wall_mid,
   wall_mid_active,
+  wall_right,
+  wall_right_active,
   cloud,
   dog,
   big_dog,
+  city,
   small_dog,
   dog_tail,
+  brown_build,
+  brown_build_active,
+  purple_build,
+  purple_build_active,
+  train_line,
   drops = [];
 
 let changeWallMid = true;
+let changeWallRight = true;
+let changeBrownBuild = true;
+let changePurpleBuild = true;
 let changeDog = true;
 
 function setup () {
@@ -36,12 +47,20 @@ function preload () {
   cloud = loadImage("./images/cloud.png");
   wall_mid = loadImage("./images/wall-mid-up.png");
   wall_mid_active = loadImage("./images/wall-mid-down.png");
+  wall_right = loadImage("./images/wall-right-up.png");
+  wall_right_active = loadImage("./images/wall-right-down.png");
+  brown_build = loadImage("./images/brown-build-up.png");
+  brown_build_active = loadImage("./images/brown-build-down.png");
+  purple_build = loadImage("./images/purple-build-up.png");
+  purple_build_active = loadImage("./images/purple-build-down.png");
   dog = loadImage("./images/dog.png");
   big_dog = loadImage("./images/big-dog.png");
   dog_tail = loadImage("./images/dog-tail.png");
   small_dog = loadImage("./images/small-dog.png");
+  city = loadImage("./images/city.png");
+  train_line = loadImage("./images/train-line.png");
 
-  container = new Container(0, 80, window.innerWidth * 0.355, window.innerHeight * 0.6);
+  container = new Container(0, 80, window.innerWidth * 0.355, window.innerHeight * 0.65);
   for (let i = 0; i <= 40; i++) {
     container.addDrop(new Drop(container));
   }
@@ -60,39 +79,70 @@ function draw () {
   pop();
 
   push()
+  if (frameCount % 30 == 0) {
+    changeBrownBuild = !changeBrownBuild;
+  }
+  image(changeBrownBuild ? brown_build : brown_build_active, window.innerWidth * 0.054, window.innerHeight * 0.28, window.innerWidth * 0.06, window.innerHeight * 0.25);
+  pop()
+
+
+
+  image(city, 0, window.innerHeight * 0.35, window.innerWidth * 0.384, window.innerHeight * 0.25);
+
+
+  push()
+  image(train_line, 0, window.innerHeight * 0.51, window.innerWidth * 0.26, window.innerHeight * 0.225)
+
+  pop()
+
+  push()
+  if (frameCount % 35 == 0) {
+    changePurpleBuild = !changePurpleBuild;
+  }
+  image(changePurpleBuild ? purple_build : purple_build_active, window.innerWidth * 0.2, window.innerHeight * 0.51, window.innerWidth * 0.19, window.innerHeight * 0.23);
+  pop()
+
+  push()
   if (frameCount % 20 == 0) {
     changeWallMid = !changeWallMid;
   }
   image(changeWallMid ? wall_mid : wall_mid_active, (window.innerWidth - 364) / 2 + 30, window.innerHeight * 0.1, 364, 230);
   pop()
 
-
-
-
-
-  if (tick % 8 === 0) {
-    stars.push(new Star());
+  push()
+  if (frameCount % 30 == 0) {
+    changeWallRight = !changeWallRight;
   }
+  image(changeWallRight ? wall_right : wall_right_active, (window.innerWidth - 180) - 30, window.innerHeight * 0.48, 180, 230);
+  pop()
 
-  // Makes an array of the indices of stars that have gone offscreen.
-  // This keeps the stars array clean, with only "live" stars.
-  let removes = [];
-  for (let i = 0; i < stars.length; i++) {
-    let star = stars[i];
-    star.update();
-    if (star.y > height) {
-      removes.push(i);
-    }
-  }
 
-  // Remove stars from highest to lowest index to avoid removing on-screen stars.
-  removes
-    .sort((a, b) => b - a)
-    .forEach((idx) => {
-      stars.splice(idx, 1);
-    });
 
-  tick++;
+
+
+  // if (tick % 8 === 0) {
+  //   stars.push(new Star());
+  // }
+
+  // // Makes an array of the indices of stars that have gone offscreen.
+  // // This keeps the stars array clean, with only "live" stars.
+  // let removes = [];
+  // for (let i = 0; i < stars.length; i++) {
+  //   let star = stars[i];
+  //   star.update();
+  //   if (star.y > height) {
+  //     removes.push(i);
+  //   }
+  // }
+
+  // // Remove stars from highest to lowest index to avoid removing on-screen stars.
+  // removes
+  //   .sort((a, b) => b - a)
+  //   .forEach((idx) => {
+  //     stars.splice(idx, 1);
+  //   });
+
+  // tick++;
 
   // Update and show drops within the container
   container.updateDrops();
@@ -102,7 +152,7 @@ function draw () {
   push()
 
   image(dog_tail, 515, (window.innerHeight - 28) - 250, 28, 28);
-  if (frameCount % 20 == 0) {
+  if (frameCount % 40 == 0) {
     changeDog = !changeDog;
   }
   if (changeDog) {
