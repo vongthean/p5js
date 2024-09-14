@@ -23,6 +23,8 @@ let tick = 0,
   purple_build,
   purple_build_active,
   train_line,
+  train,
+  fan,
   drops = [];
 
 let changeWallMid = true;
@@ -30,10 +32,14 @@ let changeWallRight = true;
 let changeBrownBuild = true;
 let changePurpleBuild = true;
 let changeDog = true;
+let angle = 0;
+let trainX = 0;
 
 function setup () {
   createCanvas(window.innerWidth, window.innerHeight);
 
+  //By default, rotations are specified in radians
+  angleMode(DEGREES);
 }
 
 function preload () {
@@ -59,8 +65,10 @@ function preload () {
   small_dog = loadImage("./images/small-dog.png");
   city = loadImage("./images/city.png");
   train_line = loadImage("./images/train-line.png");
+  train = loadImage("./images/train.png");
+  fan = loadImage("./images/fan.png");
 
-  container = new Container(0, 80, window.innerWidth * 0.355, window.innerHeight * 0.65);
+  container = new Container(0, 80, window.innerWidth * 0.5, window.innerHeight * 0.65);
   for (let i = 0; i <= 40; i++) {
     container.addDrop(new Drop(container));
   }
@@ -69,8 +77,8 @@ function preload () {
 
 function draw () {
   background('#000a23');
-  image(bg_full, 0, 0, window.innerWidth, window.innerHeight);
-  image(air_conditioner, window.innerWidth - innerWidth * 0.35, 0, window.innerWidth * 0.35, window.innerHeight * 0.4);
+
+
   image(cloud, window.innerWidth * 0.01, window.innerHeight * 0.22, 258, 80);
   image(cloud, window.innerWidth * 0.15, window.innerHeight * 0.15, 160, 50);
   push();
@@ -92,7 +100,12 @@ function draw () {
 
   push()
   image(train_line, 0, window.innerHeight * 0.51, window.innerWidth * 0.26, window.innerHeight * 0.225)
+  image(train, trainX, window.innerHeight * 0.534, window.innerWidth * 0.2, window.innerHeight * 0.05)
+  trainX -= 2;
 
+  if (trainX <= -420) {
+    trainX = window.innerWidth * 0.2;
+  }
   pop()
 
   push()
@@ -102,6 +115,12 @@ function draw () {
   image(changePurpleBuild ? purple_build : purple_build_active, window.innerWidth * 0.2, window.innerHeight * 0.51, window.innerWidth * 0.19, window.innerHeight * 0.23);
   pop()
 
+
+  // Update and show drops within the container
+  container.updateDrops();
+
+  image(bg_full, 0, 0, window.innerWidth, window.innerHeight);
+  image(air_conditioner, window.innerWidth - innerWidth * 0.35, 0, window.innerWidth * 0.35, window.innerHeight * 0.4);
   push()
   if (frameCount % 20 == 0) {
     changeWallMid = !changeWallMid;
@@ -115,10 +134,6 @@ function draw () {
   }
   image(changeWallRight ? wall_right : wall_right_active, (window.innerWidth - 180) - 30, window.innerHeight * 0.48, 180, 230);
   pop()
-
-
-
-
 
   // if (tick % 8 === 0) {
   //   stars.push(new Star());
@@ -144,9 +159,6 @@ function draw () {
 
   // tick++;
 
-  // Update and show drops within the container
-  container.updateDrops();
-
   image(window_line, 0, 50, window.innerWidth * 0.4, window.innerHeight * 0.71);
 
   push()
@@ -167,7 +179,41 @@ function draw () {
 
   image(table, window.innerWidth - (window.innerWidth * 0.9) - 20, window.innerHeight - 260, window.innerWidth * 0.9, 260);
   image(main_monitor, (window.innerWidth - 338) / 2 + 190, (window.innerHeight - 274) - 190, 338, 274);
-  image(pc_case, window.innerWidth - 250 - 250, (window.innerHeight - 374) - 190, 250, 374);
+  image(pc_case, window.innerWidth * 0.69, (window.innerHeight - 374) - 190, 250, 374);
+
+  push()
+  imageMode(CENTER);
+  translate(window.innerWidth * 0.798, window.innerHeight * 0.673);
+  rotate(angle);
+  image(fan, 0, 0, 55, 55);
+  angle += 2;
+  if (angle >= 360) {
+    angle = 0;
+  }
+  pop()
+
+  push()
+  imageMode(CENTER);
+  translate(window.innerWidth * 0.798, window.innerHeight * 0.729);
+  rotate(angle);
+  image(fan, 0, 0, 55, 55);
+  angle += 2;
+  if (angle >= 360) {
+    angle = 0;
+  }
+  pop()
+
+  push()
+  imageMode(CENTER);
+  translate(window.innerWidth * 0.798, window.innerHeight * 0.785);
+  rotate(angle);
+  image(fan, 0, 0, 55, 55);
+  angle += 2;
+  if (angle >= 360) {
+    angle = 0;
+  }
+  pop()
+
   image(people, (window.innerWidth - 303) / 2 + 90, window.innerHeight - 401, 303, 401);
 
 }
