@@ -4,6 +4,7 @@ let tick = 0,
   bg_full,
   table,
   main_monitor,
+  second_monitor,
   people,
   pc_case,
   air_conditioner,
@@ -25,15 +26,22 @@ let tick = 0,
   train_line,
   train,
   fan,
+  dot_green,
+  dot_yellow,
+  dot_black,
+
   drops = [];
 
 let changeWallMid = true;
 let changeWallRight = true;
 let changeBrownBuild = true;
 let changePurpleBuild = true;
+let currentDot = 1;
+let intervalDot = 30;
 let changeDog = true;
+
 let angle = 0;
-let trainX = 0;
+let trainX = -421;
 
 function setup () {
   createCanvas(window.innerWidth, window.innerHeight);
@@ -67,7 +75,10 @@ function preload () {
   train_line = loadImage("./images/train-line.png");
   train = loadImage("./images/train.png");
   fan = loadImage("./images/fan.png");
-
+  second_monitor = loadImage("./images/screen-2.png");
+  dot_green = loadImage("./images/dot-green.png");
+  dot_yellow = loadImage("./images/dot-yellow.png");
+  dot_black = loadImage("./images/dot-black.png");
   container = new Container(0, 80, window.innerWidth * 0.5, window.innerHeight * 0.65);
   for (let i = 0; i <= 40; i++) {
     container.addDrop(new Drop(container));
@@ -101,10 +112,10 @@ function draw () {
   push()
   image(train_line, 0, window.innerHeight * 0.51, window.innerWidth * 0.26, window.innerHeight * 0.225)
   image(train, trainX, window.innerHeight * 0.534, window.innerWidth * 0.2, window.innerHeight * 0.05)
-  trainX -= 2;
+  trainX += 2;
 
-  if (trainX <= -420) {
-    trainX = window.innerWidth * 0.2;
+  if (trainX >= window.innerWidth * 0.3) {
+    trainX = -420;
   }
   pop()
 
@@ -178,14 +189,27 @@ function draw () {
   pop()
 
   image(table, window.innerWidth - (window.innerWidth * 0.9) - 20, window.innerHeight - 260, window.innerWidth * 0.9, 260);
-  image(main_monitor, (window.innerWidth - 338) / 2 + 190, (window.innerHeight - 274) - 190, 338, 274);
-  image(pc_case, window.innerWidth * 0.69, (window.innerHeight - 374) - 190, 250, 374);
+  image(main_monitor, window.innerWidth * 0.5, window.innerHeight * 0.529, 380, 320);
+  image(pc_case, window.innerWidth * 0.69, window.innerHeight * 0.408, 290, 450);
+  image(second_monitor, window.innerWidth * 0.36, window.innerHeight * 0.38, 370, 480);
+
+  push()
+
+  if (frameCount % intervalDot == 0) {
+    currentDot = (currentDot % 3) + 1;
+  }
+
+  image(currentDot == 1 ? dot_green : dot_black, window.innerWidth * 0.717, window.innerHeight * 0.59, 16, 16);
+  image(currentDot == 2 ? dot_yellow : dot_black, window.innerWidth * 0.728, window.innerHeight * 0.59, 16, 16);
+  image(currentDot == 3 ? dot_yellow : dot_black, window.innerWidth * 0.739, window.innerHeight * 0.59, 16, 16);
+
+  pop()
 
   push()
   imageMode(CENTER);
-  translate(window.innerWidth * 0.798, window.innerHeight * 0.673);
+  translate(window.innerWidth * 0.815, window.innerHeight * 0.64);
   rotate(angle);
-  image(fan, 0, 0, 55, 55);
+  image(fan, 0, 0, 60, 60);
   angle += 2;
   if (angle >= 360) {
     angle = 0;
@@ -194,9 +218,9 @@ function draw () {
 
   push()
   imageMode(CENTER);
-  translate(window.innerWidth * 0.798, window.innerHeight * 0.729);
+  translate(window.innerWidth * 0.815, window.innerHeight * 0.708);
   rotate(angle);
-  image(fan, 0, 0, 55, 55);
+  image(fan, 0, 0, 60, 60);
   angle += 2;
   if (angle >= 360) {
     angle = 0;
@@ -205,9 +229,9 @@ function draw () {
 
   push()
   imageMode(CENTER);
-  translate(window.innerWidth * 0.798, window.innerHeight * 0.785);
+  translate(window.innerWidth * 0.815, window.innerHeight * 0.775);
   rotate(angle);
-  image(fan, 0, 0, 55, 55);
+  image(fan, 0, 0, 60, 60);
   angle += 2;
   if (angle >= 360) {
     angle = 0;
