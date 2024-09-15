@@ -29,7 +29,8 @@ let tick = 0,
   dot_green,
   dot_yellow,
   dot_black,
-
+  clock,
+  dot_clock,
   drops = [];
 
 let changeWallMid = true;
@@ -39,6 +40,10 @@ let changePurpleBuild = true;
 let currentDot = 1;
 let intervalDot = 30;
 let changeDog = true;
+let changeDotClock = true;
+
+let opacity = 225;
+
 
 let angle = 0;
 let trainX = -421;
@@ -79,6 +84,9 @@ function preload () {
   dot_green = loadImage("./images/dot-green.png");
   dot_yellow = loadImage("./images/dot-yellow.png");
   dot_black = loadImage("./images/dot-black.png");
+  clock = loadImage("./images/clock.png");
+  dot_clock = loadImage("./images/dot-clock.png");
+
   container = new Container(0, 80, window.innerWidth * 0.5, window.innerHeight * 0.65);
   for (let i = 0; i <= 40; i++) {
     container.addDrop(new Drop(container));
@@ -131,7 +139,23 @@ function draw () {
   container.updateDrops();
 
   image(bg_full, 0, 0, window.innerWidth, window.innerHeight);
-  image(air_conditioner, window.innerWidth - innerWidth * 0.35, 0, window.innerWidth * 0.35, window.innerHeight * 0.4);
+  image(air_conditioner, window.innerWidth * 0.64, 0, window.innerWidth * 0.35, window.innerHeight * 0.4);
+  image(clock, window.innerWidth * 0.78, window.innerHeight * 0.142, 140, 62);
+
+  push()
+  if (frameCount % 30 == 0) {
+    changeDotClock = !changeDotClock;
+  }
+  if (changeDotClock) {
+    opacity = 225;
+  } else {
+    opacity = 0;
+  }
+
+  tint(255, opacity);
+  image(dot_clock, window.innerWidth * 0.812, window.innerHeight * 0.1635, window.innerWidth * 0.0047, window.innerHeight * 0.018);
+  pop()
+
   push()
   if (frameCount % 20 == 0) {
     changeWallMid = !changeWallMid;
