@@ -31,6 +31,10 @@ let tick = 0,
   dot_black,
   clock,
   dot_clock,
+  dot_music,
+  btn_play,
+  btn_stop,
+  music,
   drops = [];
 
 let changeWallMid = true;
@@ -47,6 +51,8 @@ let opacity = 225;
 
 let angle = 0;
 let trainX = -421;
+
+let dotMusicX = window.innerWidth * 0.38;
 
 function setup () {
   createCanvas(window.innerWidth, window.innerHeight);
@@ -86,6 +92,11 @@ function preload () {
   dot_black = loadImage("./images/dot-black.png");
   clock = loadImage("./images/clock.png");
   dot_clock = loadImage("./images/dot-clock.png");
+  dot_music = loadImage("./images/dot-music.png");
+  btn_play = loadImage("./images/btn-play.png");
+  btn_stop = loadImage("./images/btn-stop.png");
+  currentPlay = btn_stop;
+  music = loadSound("/music.mp3", function () { });
 
   container = new Container(0, 80, window.innerWidth * 0.5, window.innerHeight * 0.65);
   for (let i = 0; i <= 40; i++) {
@@ -119,7 +130,7 @@ function draw () {
 
   push()
   image(train_line, 0, window.innerHeight * 0.51, window.innerWidth * 0.26, window.innerHeight * 0.225)
-  image(train, trainX, window.innerHeight * 0.534, window.innerWidth * 0.2, window.innerHeight * 0.05)
+  image(train, trainX, window.innerHeight * 0.532, window.innerWidth * 0.2, window.innerHeight * 0.05)
   trainX += 2;
 
   if (trainX >= window.innerWidth * 0.3) {
@@ -213,9 +224,24 @@ function draw () {
   pop()
 
   image(table, window.innerWidth - (window.innerWidth * 0.9) - 20, window.innerHeight - 260, window.innerWidth * 0.9, 260);
-  image(main_monitor, window.innerWidth * 0.5, window.innerHeight * 0.529, 380, 320);
-  image(pc_case, window.innerWidth * 0.69, window.innerHeight * 0.408, 290, 450);
-  image(second_monitor, window.innerWidth * 0.36, window.innerHeight * 0.38, 370, 480);
+  image(main_monitor, window.innerWidth * 0.5, window.innerHeight - 510, 380, 320);
+  image(pc_case, window.innerWidth * 0.69, window.innerHeight - 640, 290, 450);
+  image(second_monitor, window.innerWidth * 0.36, window.innerHeight - 670, 370, 480);
+
+  push()
+
+  image(currentPlay, window.innerWidth * 0.41, window.innerHeight - 320, 56, 54);
+  image(dot_music, dotMusicX, window.innerHeight - 345, 16, 14)
+
+  if (currentPlay === btn_play) {
+    dotMusicX += 1;
+  }
+
+
+  if (dotMusicX >= window.innerWidth * 0.46) {
+    dotMusicX = window.innerWidth * 0.38;
+  }
+  pop()
 
   push()
 
@@ -223,15 +249,15 @@ function draw () {
     currentDot = (currentDot % 3) + 1;
   }
 
-  image(currentDot == 1 ? dot_green : dot_black, window.innerWidth * 0.717, window.innerHeight * 0.59, 16, 16);
-  image(currentDot == 2 ? dot_yellow : dot_black, window.innerWidth * 0.728, window.innerHeight * 0.59, 16, 16);
-  image(currentDot == 3 ? dot_yellow : dot_black, window.innerWidth * 0.739, window.innerHeight * 0.59, 16, 16);
+  image(currentDot == 3 ? dot_green : dot_black, window.innerWidth * 0.717, window.innerHeight - 440, 16, 16);
+  image(currentDot == 2 ? dot_yellow : dot_black, window.innerWidth * 0.728, window.innerHeight - 440, 16, 16);
+  image(currentDot == 1 ? dot_yellow : dot_black, window.innerWidth * 0.739, window.innerHeight - 440, 16, 16);
 
   pop()
 
   push()
   imageMode(CENTER);
-  translate(window.innerWidth * 0.815, window.innerHeight * 0.64);
+  translate(window.innerWidth - 355, window.innerHeight - 388.79);
   rotate(angle);
   image(fan, 0, 0, 60, 60);
   angle += 2;
@@ -242,7 +268,7 @@ function draw () {
 
   push()
   imageMode(CENTER);
-  translate(window.innerWidth * 0.815, window.innerHeight * 0.708);
+  translate(window.innerWidth - 355, window.innerHeight - 315.36);
   rotate(angle);
   image(fan, 0, 0, 60, 60);
   angle += 2;
@@ -253,7 +279,7 @@ function draw () {
 
   push()
   imageMode(CENTER);
-  translate(window.innerWidth * 0.815, window.innerHeight * 0.775);
+  translate(window.innerWidth - 355, window.innerHeight - 241.93);
   rotate(angle);
   image(fan, 0, 0, 60, 60);
   angle += 2;
@@ -349,6 +375,18 @@ function createGradientBackground () {
     let gradient = lerpColor(c1, c2, n);
     stroke(gradient);
     line(0, y, width, y);
+  }
+}
+
+function keyPressed () {
+  if (key === 'M' || key === 'm') {
+    if (music.isPlaying()) {
+      currentPlay = btn_stop
+      music.stop();
+    } else {
+      currentPlay = btn_play
+      music.loop();
+    }
   }
 }
 
