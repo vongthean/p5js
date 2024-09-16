@@ -246,7 +246,7 @@ function draw () {
   push()
 
   image(currentPlay, width * 0.41, height * 0.7, width * 0.029, height * 0.05);
-  image(dot_music, dotMusicX, height * 0.68, width * 0.0083, height * 0.0129)
+  image(dot_music, dotMusicX, height * 0.677, width * 0.0083, height * 0.0129)
 
   if (currentPlay === btn_play) {
     dotMusicX += 0.5;
