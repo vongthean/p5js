@@ -37,6 +37,15 @@ let tick = 0,
   music,
   drops = [];
 
+
+let ratio = window.innerWidth / window.innerHeight
+
+let width = window.innerWidth
+
+let height = width / 1.77;
+
+console.log({ width, height, ratio });
+
 let changeWallMid = true;
 let changeWallRight = true;
 let changeBrownBuild = true;
@@ -52,10 +61,12 @@ let opacity = 225;
 let angle = 0;
 let trainX = -421;
 
-let dotMusicX = window.innerWidth * 0.38;
+let dotMusicX = width * 0.38;
+
+
 
 function setup () {
-  createCanvas(window.innerWidth, window.innerHeight);
+  createCanvas(width, height);
 
   //By default, rotations are specified in radians
   angleMode(DEGREES);
@@ -98,7 +109,7 @@ function preload () {
   currentPlay = btn_stop;
   music = loadSound("/music.mp3", function () { });
 
-  container = new Container(0, 80, window.innerWidth * 0.5, window.innerHeight * 0.65);
+  container = new Container(0, 80, width * 0.5, height * 0.65);
   for (let i = 0; i <= 40; i++) {
     container.addDrop(new Drop(container));
   }
@@ -109,49 +120,49 @@ function draw () {
   background('#000a23');
 
 
-  image(cloud, window.innerWidth * 0.01, window.innerHeight * 0.22, 258, 80);
-  image(cloud, window.innerWidth * 0.15, window.innerHeight * 0.15, 160, 50);
+  image(cloud, width * 0.01, height * 0.22, width * 0.134, height * 0.07);
+  image(cloud, width * 0.15, height * 0.15, width * 0.083, height * 0.046);
   push();
   scale(-1, 1);
-  image(cloud, -(window.innerWidth * 0.35), window.innerHeight * 0.25, 258, 80);
+  image(cloud, -(width * 0.35), height * 0.25, width * 0.134375, height * 0.074);
   pop();
 
   push()
-  if (frameCount % 30 == 0) {
+  if (frameCount % 80 == 0) {
     changeBrownBuild = !changeBrownBuild;
   }
-  image(changeBrownBuild ? brown_build : brown_build_active, window.innerWidth * 0.054, window.innerHeight * 0.28, window.innerWidth * 0.06, window.innerHeight * 0.25);
+  image(changeBrownBuild ? brown_build : brown_build_active, width * 0.054, height * 0.28, width * 0.06, height * 0.25);
   pop()
 
 
 
-  image(city, 0, window.innerHeight * 0.35, window.innerWidth * 0.384, window.innerHeight * 0.25);
+  image(city, 0, height * 0.35, width * 0.384, height * 0.25);
 
 
   push()
-  image(train_line, 0, window.innerHeight * 0.51, window.innerWidth * 0.26, window.innerHeight * 0.225)
-  image(train, trainX, window.innerHeight * 0.532, window.innerWidth * 0.2, window.innerHeight * 0.05)
+  image(train_line, 0, height * 0.51, width * 0.26, height * 0.225)
+  image(train, trainX, height * 0.532, width * 0.2, height * 0.05)
   trainX += 2;
 
-  if (trainX >= window.innerWidth * 0.3) {
+  if (trainX >= width * 0.3) {
     trainX = -420;
   }
   pop()
 
   push()
-  if (frameCount % 35 == 0) {
+  if (frameCount % 100 == 0) {
     changePurpleBuild = !changePurpleBuild;
   }
-  image(changePurpleBuild ? purple_build : purple_build_active, window.innerWidth * 0.2, window.innerHeight * 0.51, window.innerWidth * 0.19, window.innerHeight * 0.23);
+  image(changePurpleBuild ? purple_build : purple_build_active, width * 0.2, height * 0.51, width * 0.19, height * 0.23);
   pop()
 
 
   // Update and show drops within the container
   container.updateDrops();
 
-  image(bg_full, 0, 0, window.innerWidth, window.innerHeight);
-  image(air_conditioner, window.innerWidth * 0.64, 0, window.innerWidth * 0.35, window.innerHeight * 0.4);
-  image(clock, window.innerWidth * 0.78, window.innerHeight * 0.142, 140, 62);
+  image(bg_full, 0, 0, width, height);
+  image(air_conditioner, width * 0.545, 0, width * 0.45, height * 0.5);
+  image(clock, width * 0.73, height * 0.182, width * 0.08, height * 0.068);
 
   push()
   if (frameCount % 30 == 0) {
@@ -164,21 +175,21 @@ function draw () {
   }
 
   tint(255, opacity);
-  image(dot_clock, window.innerWidth * 0.812, window.innerHeight * 0.1635, window.innerWidth * 0.0047, window.innerHeight * 0.018);
+  image(dot_clock, width * 0.765, height * 0.21, width * 0.005, height * 0.018);
   pop()
 
   push()
-  if (frameCount % 20 == 0) {
+  if (frameCount % 80 == 0) {
     changeWallMid = !changeWallMid;
   }
-  image(changeWallMid ? wall_mid : wall_mid_active, (window.innerWidth - 364) / 2 + 30, window.innerHeight * 0.1, 364, 230);
+  image(changeWallMid ? wall_mid : wall_mid_active, width * 0.42, height * 0.1, width * 0.19, height * 0.21);
   pop()
 
   push()
-  if (frameCount % 30 == 0) {
+  if (frameCount % 100 == 0) {
     changeWallRight = !changeWallRight;
   }
-  image(changeWallRight ? wall_right : wall_right_active, (window.innerWidth - 180) - 30, window.innerHeight * 0.48, 180, 230);
+  image(changeWallRight ? wall_right : wall_right_active, width * 0.89, height * 0.6, width * 0.093, height * 0.21);
   pop()
 
   // if (tick % 8 === 0) {
@@ -205,41 +216,40 @@ function draw () {
 
   // tick++;
 
-  image(window_line, 0, 50, window.innerWidth * 0.4, window.innerHeight * 0.71);
+  image(window_line, 0, height * 0.046, width * 0.4, height * 0.71);
 
   push()
 
-  image(dog_tail, 515, (window.innerHeight - 28) - 250, 28, 28);
+  image(dog_tail, width * 0.268, height * 0.74, width * 0.014, height * 0.0259);
   if (frameCount % 40 == 0) {
     changeDog = !changeDog;
   }
   if (changeDog) {
-    image(small_dog, 440, (window.innerHeight - 82) - 200, 93, 75);
+    image(small_dog, width * 0.229, height * 0.738, width * 0.048, height * 0.069);
   } else {
-    image(big_dog, 434, (window.innerHeight - 82) - 210, 103, 82);
+    image(big_dog, width * 0.227, height * 0.73, width * 0.05, height * 0.0759);
   }
+  image(dog, width * 0.17, height * 0.74, width * 0.125, height * 0.083);
 
-  image(dog, 330, (window.innerHeight - 90) - 190, 240, 90);
-  image(dog, 330, (window.innerHeight - 90) - 190, 240, 90);
   pop()
 
-  image(table, window.innerWidth - (window.innerWidth * 0.9) - 20, window.innerHeight - 260, window.innerWidth * 0.9, 260);
-  image(main_monitor, window.innerWidth * 0.5, window.innerHeight - 510, 380, 320);
-  image(pc_case, window.innerWidth * 0.69, window.innerHeight - 640, 290, 450);
-  image(second_monitor, window.innerWidth * 0.36, window.innerHeight - 670, 370, 480);
+  image(table, width * 0.089, height * 0.759, width * 0.9, height * 0.24);
+  image(main_monitor, width * 0.5, height * 0.527, width * 0.2, height * 0.296);
+  image(pc_case, width * 0.69, height * 0.4, width * 0.15, height * 0.416);
+  image(second_monitor, width * 0.36, height * 0.379, width * 0.19, height * 0.44);
 
   push()
 
-  image(currentPlay, window.innerWidth * 0.41, window.innerHeight - 320, 56, 54);
-  image(dot_music, dotMusicX, window.innerHeight - 345, 16, 14)
+  image(currentPlay, width * 0.41, height * 0.7, width * 0.029, height * 0.05);
+  image(dot_music, dotMusicX, height * 0.68, width * 0.0083, height * 0.0129)
 
   if (currentPlay === btn_play) {
-    dotMusicX += 1;
+    dotMusicX += 0.5;
   }
 
 
-  if (dotMusicX >= window.innerWidth * 0.46) {
-    dotMusicX = window.innerWidth * 0.38;
+  if (dotMusicX >= width * 0.46) {
+    dotMusicX = width * 0.38;
   }
   pop()
 
@@ -249,17 +259,17 @@ function draw () {
     currentDot = (currentDot % 3) + 1;
   }
 
-  image(currentDot == 3 ? dot_green : dot_black, window.innerWidth * 0.717, window.innerHeight - 440, 16, 16);
-  image(currentDot == 2 ? dot_yellow : dot_black, window.innerWidth * 0.728, window.innerHeight - 440, 16, 16);
-  image(currentDot == 1 ? dot_yellow : dot_black, window.innerWidth * 0.739, window.innerHeight - 440, 16, 16);
+  image(currentDot == 3 ? dot_green : dot_black, width * 0.717, height * 0.592, width * 0.0083, height * 0.0148);
+  image(currentDot == 2 ? dot_yellow : dot_black, width * 0.728, height * 0.592, width * 0.0083, height * 0.0148);
+  image(currentDot == 1 ? dot_yellow : dot_black, width * 0.739, height * 0.592, width * 0.0083, height * 0.0148);
 
   pop()
 
   push()
   imageMode(CENTER);
-  translate(window.innerWidth - 355, window.innerHeight - 388.79);
+  translate(width * 0.815, height * 0.64);
   rotate(angle);
-  image(fan, 0, 0, 60, 60);
+  image(fan, 0, 0, width * 0.03125, height * 0.05555555555555555);
   angle += 2;
   if (angle >= 360) {
     angle = 0;
@@ -268,9 +278,9 @@ function draw () {
 
   push()
   imageMode(CENTER);
-  translate(window.innerWidth - 355, window.innerHeight - 315.36);
+  translate(width * 0.815, height * 0.705);
   rotate(angle);
-  image(fan, 0, 0, 60, 60);
+  image(fan, 0, 0, width * 0.03125, height * 0.05555555555555555);
   angle += 2;
   if (angle >= 360) {
     angle = 0;
@@ -279,16 +289,16 @@ function draw () {
 
   push()
   imageMode(CENTER);
-  translate(window.innerWidth - 355, window.innerHeight - 241.93);
+  translate(width * 0.815, height * 0.77);
   rotate(angle);
-  image(fan, 0, 0, 60, 60);
+  image(fan, 0, 0, width * 0.03125, height * 0.05555555555555555);
   angle += 2;
   if (angle >= 360) {
     angle = 0;
   }
   pop()
 
-  image(people, (window.innerWidth - 303) / 2 + 90, window.innerHeight - 401, 303, 401);
+  image(people, width * 0.46796875, height * 0.63, width * 0.16, height * 0.37);
 
 }
 
@@ -362,24 +372,8 @@ class Star {
   }
 }
 
-
-
-function createGradientBackground () {
-  strokeWeight(2);
-  let c1 = color(11, 32, 66);
-  let c2 = color(178, 211, 219);
-  // Create a background gradient by drawing lines across
-  // the screen that gradually get lighter.
-  for (let y = 0; y < height; y++) {
-    let n = map(y, 0, height, 0, 1);
-    let gradient = lerpColor(c1, c2, n);
-    stroke(gradient);
-    line(0, y, width, y);
-  }
-}
-
 function keyPressed () {
-  if (key === 'M' || key === 'm') {
+  if (key === 'W' || key === 'w') {
     if (music.isPlaying()) {
       currentPlay = btn_stop
       music.stop();
