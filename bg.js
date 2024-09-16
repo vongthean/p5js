@@ -72,16 +72,16 @@ function setup () {
   createCanvas(width, height);
   angleMode(DEGREES);
 
-  stars.push(new Star(width * 0.026, height * 0.185, 360, 10, 10));
-  stars.push(new Star(width * 0.2, height * 0.138, 360, 10, 10));
-  stars.push(new Star(width * 0.15625, height * 0.1, 360, 10, 10));
-  stars.push(new Star(width * 0.0625, height * 0.13, 300, 10, 10));
-  stars.push(new Star(width * 0.119, height * 0.16, 200, 10, 10));
-  stars.push(new Star(width * 0.18, height * 0.27, 200, 10, 10));
-  stars.push(new Star(width * 0.15625, height * 0.21, 200, 10, 10));
-  stars.push(new Star(width * 0.234375, height * 0.23, 200, 10, 10));
-  stars.push(new Star(width * 0.3125, height * 0.18, 200, 10, 10));
-  stars.push(new Star(width * 0.276, height * 0.1, 200, 10, 10));
+  stars.push(new Star(width * 0.026, height * 0.185, 360, width * 0.005, height * 0.009));
+  stars.push(new Star(width * 0.2, height * 0.138, 360, width * 0.005, height * 0.009));
+  stars.push(new Star(width * 0.15625, height * 0.1, 360, width * 0.005, height * 0.009));
+  stars.push(new Star(width * 0.0625, height * 0.13, 300, width * 0.005, height * 0.009));
+  stars.push(new Star(width * 0.119, height * 0.16, 200, width * 0.005, height * 0.009));
+  stars.push(new Star(width * 0.18, height * 0.27, 200, width * 0.005, height * 0.009));
+  stars.push(new Star(width * 0.15625, height * 0.21, 200, width * 0.005, height * 0.009));
+  stars.push(new Star(width * 0.234375, height * 0.23, 200, width * 0.005, height * 0.009));
+  stars.push(new Star(width * 0.3125, height * 0.18, 200, width * 0.005, height * 0.009));
+  stars.push(new Star(width * 0.276, height * 0.1, 200, width * 0.005, height * 0.009));
 }
 
 function preload () {
