@@ -36,7 +36,6 @@ let tick = 0,
   btn_play,
   btn_stop,
   music,
-  angle,
   drops = [];
 
 
@@ -57,7 +56,7 @@ let intervalDot = 30;
 let changeDog = true;
 let changeDotClock = true;
 
-
+let angle = 0;
 let weather = 3;
 
 let opacity = 225;
