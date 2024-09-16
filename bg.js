@@ -1,6 +1,7 @@
 let tick = 0,
   stars = [],
-  container,
+  containerRain,
+  snowContainer,
   bg_full,
   table,
   main_monitor,
@@ -35,6 +36,7 @@ let tick = 0,
   btn_play,
   btn_stop,
   music,
+  angle,
   drops = [];
 
 
@@ -55,10 +57,11 @@ let intervalDot = 30;
 let changeDog = true;
 let changeDotClock = true;
 
+
+let weather = 3;
+
 let opacity = 225;
 
-
-let angle = 0;
 let trainX = -421;
 
 let dotMusicX = width * 0.38;
@@ -67,9 +70,18 @@ let dotMusicX = width * 0.38;
 
 function setup () {
   createCanvas(width, height);
-
-  //By default, rotations are specified in radians
   angleMode(DEGREES);
+
+  stars.push(new Star(width * 0.026, height * 0.185, 360, 10, 10));
+  stars.push(new Star(width * 0.2, height * 0.138, 360, 10, 10));
+  stars.push(new Star(width * 0.15625, height * 0.1, 360, 10, 10));
+  stars.push(new Star(width * 0.0625, height * 0.13, 300, 10, 10));
+  stars.push(new Star(width * 0.119, height * 0.16, 200, 10, 10));
+  stars.push(new Star(width * 0.18, height * 0.27, 200, 10, 10));
+  stars.push(new Star(width * 0.15625, height * 0.21, 200, 10, 10));
+  stars.push(new Star(width * 0.234375, height * 0.23, 200, 10, 10));
+  stars.push(new Star(width * 0.3125, height * 0.18, 200, 10, 10));
+  stars.push(new Star(width * 0.276, height * 0.1, 200, 10, 10));
 }
 
 function preload () {
@@ -109,9 +121,12 @@ function preload () {
   currentPlay = btn_stop;
   music = loadSound("/music.mp3", function () { });
 
-  container = new Container(0, 80, width * 0.5, height * 0.65);
+  containerRain = new ContainerRain(0, height * 0.074, width * 0.5, height * 0.65);
+
+  snowContainer = new SnowContainer(0, height * 0.074, width * 0.5, height * 0.65);
+
   for (let i = 0; i <= 40; i++) {
-    container.addDrop(new Drop(container));
+    containerRain.addDrop(new Drop(containerRain));
   }
 }
 
@@ -119,13 +134,21 @@ function preload () {
 function draw () {
   background('#000a23');
 
+  if (weather === 3) {
+    image(cloud, width * 0.01, height * 0.22, width * 0.134, height * 0.07);
+    image(cloud, width * 0.15, height * 0.15, width * 0.083, height * 0.046);
+    push();
+    scale(-1, 1);
+    image(cloud, -(width * 0.35), height * 0.25, width * 0.134375, height * 0.074);
+    pop();
+    push();
+    for (let star of stars) {
+      star.update();
+      star.display();
+    }
+    pop()
+  }
 
-  image(cloud, width * 0.01, height * 0.22, width * 0.134, height * 0.07);
-  image(cloud, width * 0.15, height * 0.15, width * 0.083, height * 0.046);
-  push();
-  scale(-1, 1);
-  image(cloud, -(width * 0.35), height * 0.25, width * 0.134375, height * 0.074);
-  pop();
 
   push()
   if (frameCount % 80 == 0) {
@@ -156,9 +179,16 @@ function draw () {
   image(changePurpleBuild ? purple_build : purple_build_active, width * 0.2, height * 0.51, width * 0.19, height * 0.23);
   pop()
 
-
-  // Update and show drops within the container
-  container.updateDrops();
+  // Weather
+  push()
+  if (weather === 1) {
+    containerRain.updateDrops();
+  }
+  if (weather === 2) {
+    snowContainer.update();
+    snowContainer.display();
+  }
+  pop()
 
   image(bg_full, 0, 0, width, height);
   image(air_conditioner, width * 0.545, 0, width * 0.45, height * 0.5);
@@ -191,30 +221,6 @@ function draw () {
   }
   image(changeWallRight ? wall_right : wall_right_active, width * 0.89, height * 0.6, width * 0.093, height * 0.21);
   pop()
-
-  // if (tick % 8 === 0) {
-  //   stars.push(new Star());
-  // }
-
-  // // Makes an array of the indices of stars that have gone offscreen.
-  // // This keeps the stars array clean, with only "live" stars.
-  // let removes = [];
-  // for (let i = 0; i < stars.length; i++) {
-  //   let star = stars[i];
-  //   star.update();
-  //   if (star.y > height) {
-  //     removes.push(i);
-  //   }
-  // }
-
-  // // Remove stars from highest to lowest index to avoid removing on-screen stars.
-  // removes
-  //   .sort((a, b) => b - a)
-  //   .forEach((idx) => {
-  //     stars.splice(idx, 1);
-  //   });
-
-  // tick++;
 
   image(window_line, 0, height * 0.046, width * 0.4, height * 0.71);
 
@@ -302,73 +308,61 @@ function draw () {
 
 }
 
-// Using a class to contain all of the star logic instead of creating objects in the draw function.
-class Star {
-  constructor(x, y, line) {
+class SnowContainer {
+  constructor(x, y, w, h) {
     this.x = x;
     this.y = y;
-    this.time = 1;
-    this.random = map(random(), 0, 1, -5, 5); // Adding some random spin to the stars.
-    this.angle = 0;
-    this.acceleration =
-      Math.floor(Math.abs(this.random)) !== 0 ? this.random : 1; // Acceleration is > 0;
-    this.color1 = color(255, 248, 166);
-    this.color2 = color(250, 250, 250);
-    this.color = lerpColor(this.color1, this.color2, random()); // Randomize star color.
-    this.filled = random() > 0.5 ? true : false;
-
-
-  }
-
-
-
-  create (cx, cy) {
-
-    strokeWeight(6);
-    stroke(this.color);
-    if (this.filled) {
-      fill(this.color);
-    } else {
-      noFill();
-    }
-    strokeJoin(ROUND);
-    // Star shape code from https://stackoverflow.com/a/25840319
-    let rot = (PI / 2) * 3;
-    let x = cx;
-    let y = cy;
-    let step = PI / 5;
-    let outerRadius = 40;
-    let innerRadius = 20;
-
-    beginShape();
-    for (let i = 0; i < 5; i++) {
-      x = cx + cos(rot) * outerRadius;
-      y = cy + sin(rot) * outerRadius;
-      vertex(x, y);
-      rot += step;
-
-      x = cx + cos(rot) * innerRadius;
-      y = cy + sin(rot) * innerRadius;
-      vertex(x, y);
-      rot += step;
-    }
-    vertex(x, y);
-    endShape(CLOSE);
+    this.w = w;
+    this.h = h;
+    this.snowflakes = [];
   }
 
   update () {
-    frameRate(30)
+    let t = frameCount / 60;
+    for (let i = 0; i < random(2); i++) {
+      this.snowflakes.push(new Snowflake(this.x, this.y, this.w, this.h));
+    }
+    for (let flake of this.snowflakes) {
+      flake.update(t);
+    }
+  }
+
+  display () {
     push();
-    angleMode(DEGREES);
     translate(this.x, this.y);
-    rotate(this.angle);
-    scale(noise(this.time * 0.01)); // Scale the stars to make them twinkle!
-    angleMode(RADIANS);
-    this.create(0, 0);
-    // this.y += this.time * 0.01;
-    this.time += Math.abs(this.acceleration);
-    this.angle += this.acceleration;
+    for (let flake of this.snowflakes) {
+      flake.display();
+    }
     pop();
+  }
+}
+
+class Snowflake {
+  constructor(x, y, w, h) {
+    this.posX = random(w);
+    this.posY = random(-50, 0);
+    this.size = random(2, 5);
+    this.speed = random(1, 3);
+    this.angle = random(TWO_PI);
+    this.dir = random(0.01, 0.05);
+    this.w = w;
+    this.h = h;
+  }
+
+  update () {
+    this.angle += this.dir;
+    this.posY += this.speed;
+    this.posX += sin(this.angle);
+
+    if (this.posY > this.h) {
+      this.posY = random(-50, 0);
+      this.posX = random(this.w);
+    }
+  }
+
+
+  display () {
+    ellipse(this.posX, this.posY, this.size);
   }
 }
 
@@ -382,15 +376,34 @@ function keyPressed () {
       music.loop();
     }
   }
+
+  if (key === 'S' || key === 's') {
+    if (weather >= 3) {
+      weather = 0
+    }
+    weather++;
+  }
+
+  if (key === 'D' || key === 'd') {
+    if (weather >= 3) {
+      weather = 0
+    }
+    weather++;
+  }
+
+  if (key === 'A' || key === 'a') {
+    if (weather >= 3) {
+      weather = 0
+    }
+    weather++;
+  }
 }
-
-
 
 class Drop {
   constructor(container) {
     this.pos = createVector(random(container.x, container.x + container.width), container.y); // Random x within container
     this.vel = createVector(0, random(8, 11)); // Velocity
-    this.length = random(5, 10); // Length of the drop
+    this.length = random(10, 15); // Length of the drop
     this.strength = random(255); // Opacity strength
     this.container = container;  // Reference to the container
   }
@@ -415,29 +428,70 @@ class Drop {
   }
 }
 
-class Container {
+class ContainerRain {
   constructor(x, y, width, height) {
-    this.x = x;       // x position of the container
-    this.y = y;       // y position of the container
-    this.width = width; // Width of the container
-    this.height = height; // Height of the container
-    this.drops = [];  // Array to hold drop objects
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.drops = [];
   }
 
-  // Method to add drops to the container
+
   addDrop (drop) {
 
     this.drops.push(drop);
   }
 
-
-
-  // Update and display all drops within the container
   updateDrops () {
     strokeWeight(2);
     for (let drop of this.drops) {
       drop.update();
       drop.show();
     }
+  }
+}
+
+
+class Star {
+  constructor(x, y, angle, w, h) {
+    this.x = x;
+    this.y = y;
+    this.angle = angle;
+    this.width = w;
+    this.height = h;
+    this.zoomSpeed = random(0.008, 0.01)
+  }
+
+  update () {
+    let zoomFactor = sin(frameCount * this.zoomSpeed * 360);
+    this.currentWidth = this.width + zoomFactor * (this.width / 2);
+    this.currentHeight = this.height + zoomFactor * (this.height / 2);
+  }
+  display () {
+    fill(255, 204, 0);
+    noStroke();
+
+    push();
+    translate(this.x, this.y);
+    rotate(this.angle);
+    this.drawStar(0, 0, this.currentWidth, this.currentHeight / 2, 5);
+    pop();
+  }
+
+  drawStar (x, y, radius1, radius2, npoints) {
+    let angle = 360 / npoints;
+    let halfAngle = angle / 2.0;
+
+    beginShape();
+    for (let a = 0; a < 360; a += angle) {
+      let sx = x + cos(a) * radius1;
+      let sy = y + sin(a) * radius1;
+      vertex(sx, sy);
+      sx = x + cos(a + halfAngle) * radius2;
+      sy = y + sin(a + halfAngle) * radius2;
+      vertex(sx, sy);
+    }
+    endShape(CLOSE);
   }
 }
