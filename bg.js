@@ -36,6 +36,7 @@ let tick = 0,
   dot_music,
   btn_play,
   btn_stop,
+  coffee_cup,
   music,
   disk,
   radio,
@@ -136,6 +137,7 @@ function preload () {
   radio = loadImage("./images/radio.png");
   radio_speaker = loadImage("./images/radio-speaker.png")
   disk = loadImage("./images/disk.png")
+  coffee_cup = loadImage("./images/coffee-cup.png")
   currentPlay = btn_stop;
   music = loadSound("/music.mp3", function () { });
 
@@ -292,14 +294,15 @@ function draw () {
 
   image(table, width * 0.089, height * 0.759, width * 0.9, height * 0.24);
   image(main_monitor, width * 0.5, height * 0.527, width * 0.2, height * 0.296);
-  image(pc_case, width * 0.69, height * 0.4, width * 0.15, height * 0.416);
-  image(second_monitor, width * 0.36, height * 0.379, width * 0.19, height * 0.44);
+  image(pc_case, width * 0.69, height * 0.409, width * 0.15, height * 0.416);
+  image(second_monitor, width * 0.36, height * 0.383, width * 0.19, height * 0.44);
+  image(coffee_cup, width * 0.436, height * 0.757, width * 0.0390625, height * 0.0694);
 
   push()
   imageMode(CENTER);
   translate(width * 0.425, height * 0.58);
   rotate(angleDisk);
-  image(disk, 0, 0, width * 0.099, height * 0.176);
+  image(disk, 0, 0, width * 0.099, height * 0.177);
   if (currentPlay === btn_play) {
     angleDisk += 1;
   }
@@ -310,8 +313,8 @@ function draw () {
 
   push()
 
-  image(currentPlay, width * 0.41, height * 0.7, width * 0.029, height * 0.05);
-  image(dot_music, dotMusicX, height * 0.676, width * 0.0083, height * 0.0129)
+  image(currentPlay, width * 0.41, height * 0.703, width * 0.029, height * 0.05);
+  image(dot_music, dotMusicX, height * 0.68, width * 0.0083, height * 0.0129)
 
   if (currentPlay === btn_play) {
     dotMusicX += 0.3;
