@@ -314,7 +314,7 @@ function draw () {
   image(dot_music, dotMusicX, height * 0.676, width * 0.0083, height * 0.0129)
 
   if (currentPlay === btn_play) {
-    dotMusicX += 0.5;
+    dotMusicX += 0.3;
   }
 
 
