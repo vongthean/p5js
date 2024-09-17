@@ -7,6 +7,7 @@ let tick = 0,
   main_monitor,
   second_monitor,
   people,
+  light_dog,
   pc_case,
   air_conditioner,
   window_line,
@@ -36,8 +37,12 @@ let tick = 0,
   btn_play,
   btn_stop,
   music,
+  disk,
+  radio,
+  radio_speaker,
   drops = [];
 
+let = clouds = [];
 
 let ratio = window.innerWidth / window.innerHeight
 
@@ -51,12 +56,22 @@ let changeWallMid = true;
 let changeWallRight = true;
 let changeBrownBuild = true;
 let changePurpleBuild = true;
-let currentDot = 1;
+let currentDot = 0;
 let intervalDot = 30;
-let changeDog = true;
+let scaleFactorDog = 1;
+let zoomSpeedDog = 5;
 let changeDotClock = true;
 
+let scaleFactorRadio = 1;
+let zoomSpeedRadio = 7;
+let scaleFactorRadio2 = 1;
+let zoomSpeedRadio2 = 6;
+
+let arrDotPcCase = [false, false, false];
+
+
 let angle = 0;
+let angleDisk = 0;
 let weather = 3;
 
 let opacity = 225;
@@ -72,14 +87,14 @@ function setup () {
   angleMode(DEGREES);
 
   stars.push(new Star(width * 0.026, height * 0.185, 360, width * 0.005, height * 0.009));
-  stars.push(new Star(width * 0.2, height * 0.138, 360, width * 0.005, height * 0.009));
+  stars.push(new Star(width * 0.33, height * 0.138, 360, width * 0.005, height * 0.009));
   stars.push(new Star(width * 0.15625, height * 0.1, 360, width * 0.005, height * 0.009));
   stars.push(new Star(width * 0.0625, height * 0.13, 300, width * 0.005, height * 0.009));
   stars.push(new Star(width * 0.119, height * 0.16, 200, width * 0.005, height * 0.009));
   stars.push(new Star(width * 0.18, height * 0.27, 200, width * 0.005, height * 0.009));
   stars.push(new Star(width * 0.15625, height * 0.21, 200, width * 0.005, height * 0.009));
   stars.push(new Star(width * 0.234375, height * 0.23, 200, width * 0.005, height * 0.009));
-  stars.push(new Star(width * 0.3125, height * 0.18, 200, width * 0.005, height * 0.009));
+  stars.push(new Star(width * 0.3, height * 0.18, 200, width * 0.005, height * 0.009));
   stars.push(new Star(width * 0.276, height * 0.1, 200, width * 0.005, height * 0.009));
 }
 
@@ -104,6 +119,7 @@ function preload () {
   big_dog = loadImage("./images/big-dog.png");
   dog_tail = loadImage("./images/dog-tail.png");
   small_dog = loadImage("./images/small-dog.png");
+  light_dog = loadImage("./images/light-dog.png");
   city = loadImage("./images/city.png");
   train_line = loadImage("./images/train-line.png");
   train = loadImage("./images/train.png");
@@ -117,12 +133,22 @@ function preload () {
   dot_music = loadImage("./images/dot-music.png");
   btn_play = loadImage("./images/btn-play.png");
   btn_stop = loadImage("./images/btn-stop.png");
+  radio = loadImage("./images/radio.png");
+  radio_speaker = loadImage("./images/radio-speaker.png")
+  disk = loadImage("./images/disk.png")
   currentPlay = btn_stop;
   music = loadSound("/music.mp3", function () { });
 
   containerRain = new ContainerRain(0, height * 0.074, width * 0.5, height * 0.65);
 
   snowContainer = new SnowContainer(0, height * 0.074, width * 0.5, height * 0.65);
+
+
+  clouds.push(new Cloud(width * 0.1, height * 0.26, width * 0.134, height * 0.07, false));
+
+  clouds.push(new Cloud(width * 0.2, height * 0.15, width * 0.083, height * 0.046, false));
+
+  clouds.push(new Cloud(-(width * 0.3), height * 0.29, width * 0.134375, height * 0.074, true));
 
   for (let i = 0; i <= 40; i++) {
     containerRain.addDrop(new Drop(containerRain));
@@ -134,12 +160,13 @@ function draw () {
   background('#000a23');
 
   if (weather === 3) {
-    image(cloud, width * 0.01, height * 0.22, width * 0.134, height * 0.07);
-    image(cloud, width * 0.15, height * 0.15, width * 0.083, height * 0.046);
-    push();
-    scale(-1, 1);
-    image(cloud, -(width * 0.35), height * 0.25, width * 0.134375, height * 0.074);
-    pop();
+    push()
+    for (let cloud of clouds) {
+      cloud.update();
+      cloud.display();
+    }
+    pop()
+
     push();
     for (let star of stars) {
       star.update();
@@ -164,7 +191,7 @@ function draw () {
   push()
   image(train_line, 0, height * 0.51, width * 0.26, height * 0.225)
   image(train, trainX, height * 0.532, width * 0.2, height * 0.05)
-  trainX += 2;
+  trainX += 3;
 
   if (trainX >= width * 0.3) {
     trainX = -420;
@@ -177,6 +204,8 @@ function draw () {
   }
   image(changePurpleBuild ? purple_build : purple_build_active, width * 0.2, height * 0.51, width * 0.19, height * 0.23);
   pop()
+
+  image(light_dog, width * 0.16, height * 0.63, width * 0.07, height * 0.11);
 
   // Weather
   push()
@@ -192,6 +221,30 @@ function draw () {
   image(bg_full, 0, 0, width, height);
   image(air_conditioner, width * 0.545, 0, width * 0.45, height * 0.5);
   image(clock, width * 0.73, height * 0.182, width * 0.08, height * 0.068);
+
+  image(radio, width * 0.8, height * 0.338, width * 0.113, height * 0.115);
+  if (currentPlay === btn_play) {
+    push()
+    scaleFactorRadio = 1 + sin(frameCount * zoomSpeedRadio) * 0.13;
+    let imgWidthRadio = width * 0.026 * scaleFactorRadio;
+    let imgHeightRadio = height * 0.0472 * scaleFactorRadio;
+    imageMode(CENTER);
+    image(radio_speaker, width * 0.875, height * 0.417, imgWidthRadio, imgHeightRadio);
+    pop()
+
+
+    push()
+    scaleFactorRadio2 = 1 + sin(frameCount * zoomSpeedRadio2) * 0.13;
+    let imgWidthRadio2 = width * 0.026 * scaleFactorRadio2;
+    let imgHeightRadio2 = height * 0.0472 * scaleFactorRadio2;
+    imageMode(CENTER);
+    image(radio_speaker, width * 0.822, height * 0.417, imgWidthRadio2, imgHeightRadio2);
+    pop()
+  }
+  if (currentPlay === btn_stop) {
+    image(radio_speaker, width * 0.809, height * 0.394, width * 0.026, height * 0.0472);
+    image(radio_speaker, width * 0.861, height * 0.394, width * 0.026, height * 0.0472);
+  }
 
   push()
   if (frameCount % 30 == 0) {
@@ -223,20 +276,19 @@ function draw () {
 
   image(window_line, 0, height * 0.046, width * 0.4, height * 0.71);
 
+  image(dog_tail, width * 0.265, height * 0.743, width * 0.014, height * 0.0259);
+
   push()
+  scaleFactorDog = 1 + sin(frameCount * zoomSpeedDog) * 0.09;
 
-  image(dog_tail, width * 0.268, height * 0.74, width * 0.014, height * 0.0259);
-  if (frameCount % 40 == 0) {
-    changeDog = !changeDog;
-  }
-  if (changeDog) {
-    image(small_dog, width * 0.229, height * 0.738, width * 0.048, height * 0.069);
-  } else {
-    image(big_dog, width * 0.227, height * 0.73, width * 0.05, height * 0.0759);
-  }
-  image(dog, width * 0.17, height * 0.74, width * 0.125, height * 0.083);
+  let imgWidth = width * 0.048 * scaleFactorDog;
 
+  let imgHeight = height * 0.069 * scaleFactorDog;
+  imageMode(CENTER);
+  image(small_dog, width * 0.252, height * 0.775, imgWidth, imgHeight);
   pop()
+
+  image(dog, width * 0.17, height * 0.74, width * 0.125, height * 0.083);
 
   image(table, width * 0.089, height * 0.759, width * 0.9, height * 0.24);
   image(main_monitor, width * 0.5, height * 0.527, width * 0.2, height * 0.296);
@@ -244,9 +296,22 @@ function draw () {
   image(second_monitor, width * 0.36, height * 0.379, width * 0.19, height * 0.44);
 
   push()
+  imageMode(CENTER);
+  translate(width * 0.425, height * 0.58);
+  rotate(angleDisk);
+  image(disk, 0, 0, width * 0.099, height * 0.176);
+  if (currentPlay === btn_play) {
+    angleDisk += 1;
+  }
+  if (angleDisk >= 360) {
+    angleDisk = 0;
+  }
+  pop()
+
+  push()
 
   image(currentPlay, width * 0.41, height * 0.7, width * 0.029, height * 0.05);
-  image(dot_music, dotMusicX, height * 0.677, width * 0.0083, height * 0.0129)
+  image(dot_music, dotMusicX, height * 0.676, width * 0.0083, height * 0.0129)
 
   if (currentPlay === btn_play) {
     dotMusicX += 0.5;
@@ -261,12 +326,21 @@ function draw () {
   push()
 
   if (frameCount % intervalDot == 0) {
+    if (currentDot >= 3) {
+      currentDot = -1;
+      for (let i = 0; i < arrDotPcCase.length; i++) {
+        arrDotPcCase[i] = false;
+      }
+    }
     currentDot = (currentDot % 3) + 1;
+
+    arrDotPcCase[currentDot - 1] = true;
+
   }
 
-  image(currentDot == 3 ? dot_green : dot_black, width * 0.717, height * 0.592, width * 0.0083, height * 0.0148);
-  image(currentDot == 2 ? dot_yellow : dot_black, width * 0.728, height * 0.592, width * 0.0083, height * 0.0148);
-  image(currentDot == 1 ? dot_yellow : dot_black, width * 0.739, height * 0.592, width * 0.0083, height * 0.0148);
+  image(arrDotPcCase[0] ? dot_green : dot_black, width * 0.717, height * 0.592, width * 0.0083, height * 0.0148);
+  image(arrDotPcCase[1] ? dot_yellow : dot_black, width * 0.728, height * 0.592, width * 0.0083, height * 0.0148);
+  image(arrDotPcCase[2] ? dot_yellow : dot_black, width * 0.739, height * 0.592, width * 0.0083, height * 0.0148);
 
   pop()
 
@@ -492,5 +566,31 @@ class Star {
       vertex(sx, sy);
     }
     endShape(CLOSE);
+  }
+}
+
+
+class Cloud {
+  constructor(x, y, width, height, flipX) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.flipX = flipX
+    this.height = height;
+    this.yOffset = random(100, 150);
+  }
+  update () {
+    this.y += sin(frameCount + this.yOffset) * 0.2;
+  }
+
+  display () {
+    imageMode(CENTER);
+    if (this.flipX) {
+      scale(-1, 1);
+      image(cloud, this.x, this.y, this.width, this.height);
+    } else {
+      image(cloud, this.x, this.y, this.width, this.height);
+    }
+
   }
 }
