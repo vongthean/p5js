@@ -239,7 +239,7 @@ function draw () {
     let imgWidthRadio = width * 0.026 * scaleFactorRadio;
     let imgHeightRadio = height * 0.0472 * scaleFactorRadio;
     imageMode(CENTER);
-    image(radio_speaker, width * 0.875, height * 0.417, imgWidthRadio, imgHeightRadio);
+    image(radio_speaker, width * 0.874, height * 0.418, imgWidthRadio, imgHeightRadio);
     pop()
 
     push()
@@ -247,7 +247,7 @@ function draw () {
     let imgWidthRadio2 = width * 0.026 * scaleFactorRadio2;
     let imgHeightRadio2 = height * 0.0472 * scaleFactorRadio2;
     imageMode(CENTER);
-    image(radio_speaker, width * 0.822, height * 0.417, imgWidthRadio2, imgHeightRadio2);
+    image(radio_speaker, width * 0.822, height * 0.418, imgWidthRadio2, imgHeightRadio2);
     pop()
 
     push()
