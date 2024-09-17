@@ -81,6 +81,14 @@ let trainX = -421;
 
 let dotMusicX = width * 0.38;
 
+let amplitude = 50;
+let frequency = 15;
+let waveSpeed = 6;
+let phase = 0;
+let waveX = width * 0.824;
+let waveY = height * 0.378;
+let waveWidth = width * 0.05;
+let waveHeight = height * 0.006;
 
 
 function setup () {
@@ -234,7 +242,6 @@ function draw () {
     image(radio_speaker, width * 0.875, height * 0.417, imgWidthRadio, imgHeightRadio);
     pop()
 
-
     push()
     scaleFactorRadio2 = 1 + sin(frameCount * zoomSpeedRadio2) * 0.13;
     let imgWidthRadio2 = width * 0.026 * scaleFactorRadio2;
@@ -242,7 +249,21 @@ function draw () {
     imageMode(CENTER);
     image(radio_speaker, width * 0.822, height * 0.417, imgWidthRadio2, imgHeightRadio2);
     pop()
+
+    push()
+    stroke(255);
+    strokeWeight(2);
+    noFill();
+    beginShape();
+    for (let x = 0; x < waveWidth; x++) {
+      let y = waveY + sin(x * frequency + phase) * waveHeight;
+      vertex(waveX + x, y);
+    }
+    endShape();
+    phase += waveSpeed;
+    pop()
   }
+
   if (currentPlay === btn_stop) {
     image(radio_speaker, width * 0.809, height * 0.394, width * 0.026, height * 0.0472);
     image(radio_speaker, width * 0.861, height * 0.394, width * 0.026, height * 0.0472);
