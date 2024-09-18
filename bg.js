@@ -60,7 +60,7 @@ let changePurpleBuild = true;
 let currentDot = 0;
 let intervalDot = 30;
 let scaleFactorDog = 1;
-let zoomSpeedDog = 5;
+let zoomSpeedDog = 2;
 let changeDotClock = true;
 
 let scaleFactorRadio = 1;
@@ -86,7 +86,7 @@ let frequency = 15;
 let waveSpeed = 6;
 let phase = 0;
 let waveX = width * 0.824;
-let waveY = height * 0.378;
+let waveY = height * 0.409;
 let waveWidth = width * 0.05;
 let waveHeight = height * 0.006;
 
@@ -195,18 +195,18 @@ function draw () {
 
 
 
-  image(city, 0, height * 0.35, width * 0.384, height * 0.25);
-
+  image(city, 0, height * 0.36, width * 0.384, height * 0.25);
 
   push()
-  image(train_line, 0, height * 0.51, width * 0.26, height * 0.225)
-  image(train, trainX, height * 0.532, width * 0.2, height * 0.05)
+  image(train, trainX, height * 0.535, width * 0.2, height * 0.05)
   trainX += 3;
 
   if (trainX >= width * 0.3) {
     trainX = -420;
   }
   pop()
+
+  image(train_line, 0, height * 0.51, width * 0.26, height * 0.225)
 
   push()
   if (frameCount % 100 == 0) {
@@ -229,17 +229,17 @@ function draw () {
   pop()
 
   image(bg_full, 0, 0, width, height);
-  image(air_conditioner, width * 0.545, 0, width * 0.45, height * 0.5);
-  image(clock, width * 0.73, height * 0.182, width * 0.08, height * 0.068);
+  image(air_conditioner, width * 0.54, 0, width * 0.46, height * 0.535);
+  image(clock, width * 0.73, height * 0.2, width * 0.08, height * 0.068);
 
-  image(radio, width * 0.8, height * 0.338, width * 0.113, height * 0.115);
+  image(radio, width * 0.8, height * 0.369, width * 0.113, height * 0.115);
   if (currentPlay === btn_play) {
     push()
     scaleFactorRadio = 1 + sin(frameCount * zoomSpeedRadio) * 0.13;
     let imgWidthRadio = width * 0.026 * scaleFactorRadio;
     let imgHeightRadio = height * 0.0472 * scaleFactorRadio;
     imageMode(CENTER);
-    image(radio_speaker, width * 0.874, height * 0.418, imgWidthRadio, imgHeightRadio);
+    image(radio_speaker, width * 0.874, height * 0.449, imgWidthRadio, imgHeightRadio);
     pop()
 
     push()
@@ -247,7 +247,7 @@ function draw () {
     let imgWidthRadio2 = width * 0.026 * scaleFactorRadio2;
     let imgHeightRadio2 = height * 0.0472 * scaleFactorRadio2;
     imageMode(CENTER);
-    image(radio_speaker, width * 0.822, height * 0.418, imgWidthRadio2, imgHeightRadio2);
+    image(radio_speaker, width * 0.822, height * 0.449, imgWidthRadio2, imgHeightRadio2);
     pop()
 
     push()
@@ -265,8 +265,8 @@ function draw () {
   }
 
   if (currentPlay === btn_stop) {
-    image(radio_speaker, width * 0.809, height * 0.394, width * 0.026, height * 0.0472);
-    image(radio_speaker, width * 0.861, height * 0.394, width * 0.026, height * 0.0472);
+    image(radio_speaker, width * 0.809, height * 0.425, width * 0.026, height * 0.0472);
+    image(radio_speaker, width * 0.861, height * 0.425, width * 0.026, height * 0.0472);
   }
 
   push()
@@ -280,7 +280,7 @@ function draw () {
   }
 
   tint(255, opacity);
-  image(dot_clock, width * 0.765, height * 0.21, width * 0.005, height * 0.018);
+  image(dot_clock, width * 0.765, height * 0.229, width * 0.005, height * 0.018);
   pop()
 
   push()
@@ -294,7 +294,7 @@ function draw () {
   if (frameCount % 100 == 0) {
     changeWallRight = !changeWallRight;
   }
-  image(changeWallRight ? wall_right : wall_right_active, width * 0.89, height * 0.6, width * 0.093, height * 0.21);
+  image(changeWallRight ? wall_right : wall_right_active, width * 0.87, height * 0.56, width * 0.098, height * 0.228);
   pop()
 
   image(window_line, 0, height * 0.046, width * 0.4, height * 0.71);
@@ -314,7 +314,7 @@ function draw () {
   image(dog, width * 0.17, height * 0.74, width * 0.125, height * 0.083);
 
   image(table, width * 0.089, height * 0.759, width * 0.9, height * 0.24);
-  image(main_monitor, width * 0.5, height * 0.527, width * 0.2, height * 0.296);
+  image(main_monitor, width * 0.496, height * 0.527, width * 0.2, height * 0.296);
   image(pc_case, width * 0.69, height * 0.409, width * 0.15, height * 0.416);
   image(second_monitor, width * 0.36, height * 0.383, width * 0.19, height * 0.44);
   image(coffee_cup, width * 0.436, height * 0.757, width * 0.0390625, height * 0.0694);
@@ -416,9 +416,11 @@ class SnowContainer {
 
   update () {
     let t = frameCount / 60;
-    for (let i = 0; i < random(2); i++) {
+
+    if (frameCount % 5 === 0) {
       this.snowflakes.push(new Snowflake(this.x, this.y, this.w, this.h));
     }
+
     for (let flake of this.snowflakes) {
       flake.update(t);
     }
@@ -438,7 +440,7 @@ class Snowflake {
   constructor(x, y, w, h) {
     this.posX = random(w);
     this.posY = random(-50, 0);
-    this.size = random(2, 5);
+    this.size = random(3, 6);
     this.speed = random(1, 3);
     this.angle = random(TWO_PI);
     this.dir = random(0.01, 0.05);
@@ -475,24 +477,18 @@ function keyPressed () {
   }
 
   if (key === 'S' || key === 's') {
-    if (weather >= 3) {
-      weather = 0
-    }
-    weather++;
+
+    weather = 2;
   }
 
   if (key === 'D' || key === 'd') {
-    if (weather >= 3) {
-      weather = 0
-    }
-    weather++;
+
+    weather = 1;
   }
 
   if (key === 'A' || key === 'a') {
-    if (weather >= 3) {
-      weather = 0
-    }
-    weather++;
+
+    weather = 3
   }
 }
 
