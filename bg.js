@@ -187,7 +187,7 @@ function draw () {
 
 
   push()
-  if (frameCount % 80 == 0) {
+  if (frameCount % 120 == 0) {
     changeBrownBuild = !changeBrownBuild;
   }
   image(changeBrownBuild ? brown_build : brown_build_active, width * 0.054, height * 0.28, width * 0.06, height * 0.25);
@@ -209,7 +209,7 @@ function draw () {
   image(train_line, 0, height * 0.51, width * 0.26, height * 0.225)
 
   push()
-  if (frameCount % 100 == 0) {
+  if (frameCount % 110 == 0) {
     changePurpleBuild = !changePurpleBuild;
   }
   image(changePurpleBuild ? purple_build : purple_build_active, width * 0.2, height * 0.51, width * 0.19, height * 0.23);
@@ -441,7 +441,7 @@ class Snowflake {
   constructor(x, y, w, h) {
     this.posX = random(w);
     this.posY = random(-50, 0);
-    this.size = random(3, 6);
+    this.size = random(4, 7);
     this.speed = random(1, 3);
     this.angle = random(TWO_PI);
     this.dir = random(0.01, 0.05);
