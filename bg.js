@@ -79,7 +79,7 @@ let opacity = 225;
 
 let trainX = -421;
 
-let dotMusicX = width * 0.38;
+let dotMusicX = width * 0.35;
 
 let amplitude = 50;
 let frequency = 15;
@@ -229,8 +229,8 @@ function draw () {
   pop()
 
   image(bg_full, 0, 0, width, height);
-  image(air_conditioner, width * 0.54, 0, width * 0.46, height * 0.535);
-  image(clock, width * 0.73, height * 0.2, width * 0.08, height * 0.068);
+  image(air_conditioner, width * 0.535, 0, width * 0.46, height * 0.535);
+  image(clock, width * 0.72, height * 0.2, width * 0.08, height * 0.068);
 
   image(radio, width * 0.8, height * 0.369, width * 0.113, height * 0.115);
   if (currentPlay === btn_play) {
@@ -280,21 +280,21 @@ function draw () {
   }
 
   tint(255, opacity);
-  image(dot_clock, width * 0.765, height * 0.229, width * 0.005, height * 0.018);
+  image(dot_clock, width * 0.755, height * 0.229, width * 0.005, height * 0.018);
   pop()
 
   push()
   if (frameCount % 80 == 0) {
     changeWallMid = !changeWallMid;
   }
-  image(changeWallMid ? wall_mid : wall_mid_active, width * 0.42, height * 0.1, width * 0.19, height * 0.21);
+  image(changeWallMid ? wall_mid : wall_mid_active, width * 0.415, height * 0.125, width * 0.19, height * 0.21);
   pop()
 
   push()
   if (frameCount % 100 == 0) {
     changeWallRight = !changeWallRight;
   }
-  image(changeWallRight ? wall_right : wall_right_active, width * 0.87, height * 0.56, width * 0.098, height * 0.228);
+  image(changeWallRight ? wall_right : wall_right_active, width * 0.865, height * 0.548, width * 0.108, height * 0.24);
   pop()
 
   image(window_line, 0, height * 0.046, width * 0.4, height * 0.71);
@@ -314,14 +314,15 @@ function draw () {
   image(dog, width * 0.17, height * 0.74, width * 0.125, height * 0.083);
 
   image(table, width * 0.089, height * 0.759, width * 0.9, height * 0.24);
-  image(main_monitor, width * 0.496, height * 0.527, width * 0.2, height * 0.296);
-  image(pc_case, width * 0.69, height * 0.409, width * 0.15, height * 0.416);
-  image(second_monitor, width * 0.36, height * 0.383, width * 0.19, height * 0.44);
-  image(coffee_cup, width * 0.436, height * 0.757, width * 0.0390625, height * 0.0694);
+
+  image(pc_case, width * 0.684, height * 0.375, width * 0.16, height * 0.45);
+  image(second_monitor, width * 0.32, height * 0.34, width * 0.22, height * 0.485);
+  image(main_monitor, width * 0.472, height * 0.496, width * 0.22, height * 0.33);
+  image(coffee_cup, width * 0.398, height * 0.757, width * 0.0390625, height * 0.0694);
 
   push()
   imageMode(CENTER);
-  translate(width * 0.425, height * 0.58);
+  translate(width * 0.395, height * 0.56);
   rotate(angleDisk);
   image(disk, 0, 0, width * 0.099, height * 0.177);
   if (currentPlay === btn_play) {
@@ -334,16 +335,16 @@ function draw () {
 
   push()
 
-  image(currentPlay, width * 0.41, height * 0.703, width * 0.029, height * 0.05);
-  image(dot_music, dotMusicX, height * 0.68, width * 0.0083, height * 0.0129)
+  image(currentPlay, width * 0.38, height * 0.695, width * 0.029, height * 0.05);
+  image(dot_music, dotMusicX, height * 0.667, width * 0.0083, height * 0.0129)
 
   if (currentPlay === btn_play) {
     dotMusicX += 0.3;
   }
 
 
-  if (dotMusicX >= width * 0.46) {
-    dotMusicX = width * 0.38;
+  if (dotMusicX >= width * 0.433) {
+    dotMusicX = width * 0.35;
   }
   pop()
 
@@ -362,17 +363,17 @@ function draw () {
 
   }
 
-  image(arrDotPcCase[0] ? dot_green : dot_black, width * 0.717, height * 0.592, width * 0.0083, height * 0.0148);
-  image(arrDotPcCase[1] ? dot_yellow : dot_black, width * 0.728, height * 0.592, width * 0.0083, height * 0.0148);
-  image(arrDotPcCase[2] ? dot_yellow : dot_black, width * 0.739, height * 0.592, width * 0.0083, height * 0.0148);
+  image(arrDotPcCase[0] ? dot_green : dot_black, width * 0.717, height * 0.577, width * 0.0083, height * 0.0148);
+  image(arrDotPcCase[1] ? dot_yellow : dot_black, width * 0.728, height * 0.577, width * 0.0083, height * 0.0148);
+  image(arrDotPcCase[2] ? dot_yellow : dot_black, width * 0.739, height * 0.577, width * 0.0083, height * 0.0148);
 
   pop()
 
   push()
   imageMode(CENTER);
-  translate(width * 0.815, height * 0.64);
+  translate(width * 0.816, height * 0.628);
   rotate(angle);
-  image(fan, 0, 0, width * 0.03125, height * 0.05555555555555555);
+  image(fan, 0, 0, width * 0.03697916666666667, height * 0.06574074074074074);
   angle += 2;
   if (angle >= 360) {
     angle = 0;
@@ -381,9 +382,9 @@ function draw () {
 
   push()
   imageMode(CENTER);
-  translate(width * 0.815, height * 0.705);
+  translate(width * 0.816, height * 0.699);
   rotate(angle);
-  image(fan, 0, 0, width * 0.03125, height * 0.05555555555555555);
+  image(fan, 0, 0, width * 0.03697916666666667, height * 0.06574074074074074);
   angle += 2;
   if (angle >= 360) {
     angle = 0;
@@ -392,16 +393,16 @@ function draw () {
 
   push()
   imageMode(CENTER);
-  translate(width * 0.815, height * 0.77);
+  translate(width * 0.816, height * 0.77);
   rotate(angle);
-  image(fan, 0, 0, width * 0.03125, height * 0.05555555555555555);
+  image(fan, 0, 0, width * 0.03697916666666667, height * 0.06574074074074074);
   angle += 2;
   if (angle >= 360) {
     angle = 0;
   }
   pop()
 
-  image(people, width * 0.46796875, height * 0.63, width * 0.16, height * 0.37);
+  image(people, width * 0.43, height * 0.61, width * 0.18, height * 0.39);
 
 }
 
